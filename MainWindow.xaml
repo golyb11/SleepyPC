@@ -1,0 +1,358 @@
+﻿<Window x:Class="PCsleePtime.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:PCsleePtime"
+        Title="SleepyPC"
+        Height="620" Width="440"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
+
+        <Style x:Key="ActionCardStyle" TargetType="RadioButton">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="CardBorder"
+                                Background="{DynamicResource CardBackgroundBrush}"
+                                BorderBrush="{DynamicResource BorderBrush}"
+                                BorderThickness="1.5"
+                                CornerRadius="12"
+                                Padding="16,14"
+                                Cursor="Hand"
+                                Margin="4">
+                            <Border.Effect>
+                                <DropShadowEffect ShadowDepth="2" BlurRadius="8" Opacity="0.08" Color="Black"/>
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="CardBorder" Property="Background" Value="{DynamicResource CardSelectedBrush}"/>
+                                <Setter TargetName="CardBorder" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="CardBorder" Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PresetButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="BtnBorder"
+                                Background="{DynamicResource PresetBackgroundBrush}"
+                                CornerRadius="8"
+                                Padding="14,10"
+                                Cursor="Hand"
+                                Margin="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="{DynamicResource PresetHoverBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="AccentButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="BtnBorder"
+                                Background="{DynamicResource AccentBrush}"
+                                CornerRadius="12"
+                                Padding="24,14"
+                                Cursor="Hand">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="{DynamicResource AccentHoverBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CancelButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="BtnBorder"
+                                Background="{DynamicResource CancelButtonBrush}"
+                                CornerRadius="12"
+                                Padding="32,16"
+                                Cursor="Hand">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BtnBorder" Property="Background" Value="{DynamicResource CancelButtonHoverBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TimeInputStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource CardBackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryTextBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="8,6"/>
+            <Setter Property="Width" Value="60"/>
+            <Setter Property="MaxLength" Value="2"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Border Background="{DynamicResource PrimaryBackgroundBrush}"
+            CornerRadius="16"
+            BorderBrush="{DynamicResource BorderBrush}"
+            BorderThickness="1">
+        <Border.Effect>
+            <DropShadowEffect ShadowDepth="4" BlurRadius="20" Opacity="0.12" Color="Black"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="44"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Title Bar -->
+            <Border Grid.Row="0" Background="Transparent" MouseLeftButtonDown="TitleBar_MouseLeftButtonDown">
+                <Grid>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="16,0,0,0">
+                        <TextBlock Text="☾" FontSize="18" VerticalAlignment="Center" Margin="0,0,8,0"
+                                   Foreground="{DynamicResource AccentBrush}"/>
+                        <TextBlock Text="SleepyPC" FontSize="14" FontWeight="SemiBold"
+                                   Foreground="{DynamicResource PrimaryTextBrush}" VerticalAlignment="Center"/>
+                    </StackPanel>
+
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,8,0">
+                        <!-- Theme Toggle -->
+                        <Button x:Name="ThemeToggleBtn" Click="ThemeToggle_Click"
+                                ToolTip="Сменить тему" Margin="0,0,4,0"
+                                Width="32" Height="32" Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Bd" Background="Transparent" CornerRadius="6">
+                                        <TextBlock x:Name="Icon" Text="🌙" FontSize="16"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource PresetBackgroundBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <!-- Minimize -->
+                        <Button Click="Minimize_Click" Width="32" Height="32" Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Bd" Background="Transparent" CornerRadius="6">
+                                        <TextBlock Text="─" FontSize="14" FontWeight="Bold"
+                                                   Foreground="{DynamicResource SecondaryTextBrush}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="{DynamicResource PresetBackgroundBrush}"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+
+                        <!-- Close (hide to tray) -->
+                        <Button Click="Close_Click" Width="32" Height="32" Cursor="Hand">
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border x:Name="Bd" Background="Transparent" CornerRadius="6">
+                                        <TextBlock Text="✕" FontSize="13"
+                                                   Foreground="{DynamicResource SecondaryTextBrush}"
+                                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter TargetName="Bd" Property="Background" Value="#FFFF4444"/>
+                                            <Setter TargetName="Bd" Property="TextBlock.Foreground" Value="White"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Button.Template>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Main Content -->
+            <Grid Grid.Row="1" Margin="24,8,24,24">
+                <!-- Setup Panel -->
+                <StackPanel x:Name="SetupPanel" Visibility="Visible">
+                    <StackPanel.RenderTransform>
+                        <TranslateTransform x:Name="SetupTranslate" Y="0"/>
+                    </StackPanel.RenderTransform>
+
+                    <!-- Action Selection -->
+                    <TextBlock Text="Действие" FontSize="13" FontWeight="SemiBold"
+                               Foreground="{DynamicResource SecondaryTextBrush}" Margin="4,0,0,8"/>
+                    <UniformGrid Columns="3">
+                        <RadioButton x:Name="RbShutdown" GroupName="Action" IsChecked="True"
+                                     Style="{StaticResource ActionCardStyle}">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="⏻" FontSize="22" HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource AccentBrush}"/>
+                                <TextBlock Text="Выключить" FontSize="11" Margin="0,4,0,0"
+                                           Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton x:Name="RbSleep" GroupName="Action"
+                                     Style="{StaticResource ActionCardStyle}">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="💤" FontSize="22" HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource AccentBrush}"/>
+                                <TextBlock Text="Сон" FontSize="11" Margin="0,4,0,0"
+                                           Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton x:Name="RbRestart" GroupName="Action"
+                                     Style="{StaticResource ActionCardStyle}">
+                            <StackPanel HorizontalAlignment="Center">
+                                <TextBlock Text="🔄" FontSize="22" HorizontalAlignment="Center"
+                                           Foreground="{DynamicResource AccentBrush}"/>
+                                <TextBlock Text="Перезагрузка" FontSize="11" Margin="0,4,0,0"
+                                           Foreground="{DynamicResource PrimaryTextBrush}" HorizontalAlignment="Center"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </UniformGrid>
+
+                    <!-- Time Mode Toggle -->
+                    <Grid Margin="0,20,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <RadioButton x:Name="RbCountdown" GroupName="TimeMode" IsChecked="True"
+                                     Checked="TimeMode_Changed" Style="{StaticResource ActionCardStyle}" Grid.Column="0">
+                            <TextBlock Text="⏱ Через" FontSize="13"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </RadioButton>
+                        <RadioButton x:Name="RbExactTime" GroupName="TimeMode"
+                                     Checked="TimeMode_Changed" Style="{StaticResource ActionCardStyle}" Grid.Column="1">
+                            <TextBlock Text="🕐 Точное время" FontSize="13"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </RadioButton>
+                    </Grid>
+
+                    <!-- Countdown Input -->
+                    <StackPanel x:Name="CountdownPanel" Orientation="Horizontal"
+                                HorizontalAlignment="Center" Margin="0,16,0,0">
+                        <TextBox x:Name="TbHours" Style="{StaticResource TimeInputStyle}" Text="0"/>
+                        <TextBlock Text="ч" FontSize="16" VerticalAlignment="Center" Margin="6,0,16,0"
+                                   Foreground="{DynamicResource SecondaryTextBrush}"/>
+                        <TextBox x:Name="TbMinutes" Style="{StaticResource TimeInputStyle}" Text="30"/>
+                        <TextBlock Text="мин" FontSize="16" VerticalAlignment="Center" Margin="6,0,0,0"
+                                   Foreground="{DynamicResource SecondaryTextBrush}"/>
+                    </StackPanel>
+
+                    <!-- Exact Time Input -->
+                    <StackPanel x:Name="ExactTimePanel" Orientation="Horizontal"
+                                HorizontalAlignment="Center" Margin="0,16,0,0" Visibility="Collapsed">
+                        <TextBox x:Name="TbExactHour" Style="{StaticResource TimeInputStyle}" Text="23"/>
+                        <TextBlock Text=":" FontSize="24" FontWeight="Bold" VerticalAlignment="Center" Margin="8,0,8,0"
+                                   Foreground="{DynamicResource SecondaryTextBrush}"/>
+                        <TextBox x:Name="TbExactMinute" Style="{StaticResource TimeInputStyle}" Text="00"/>
+                    </StackPanel>
+
+                    <!-- Presets -->
+                    <TextBlock Text="Быстрый выбор" FontSize="13" FontWeight="SemiBold"
+                               Foreground="{DynamicResource SecondaryTextBrush}" Margin="4,24,0,8"/>
+                    <UniformGrid Columns="4">
+                        <Button Style="{StaticResource PresetButtonStyle}" Click="Preset_Click" Tag="15">
+                            <TextBlock Text="15 мин" FontSize="12" FontWeight="Medium"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </Button>
+                        <Button Style="{StaticResource PresetButtonStyle}" Click="Preset_Click" Tag="30">
+                            <TextBlock Text="30 мин" FontSize="12" FontWeight="Medium"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </Button>
+                        <Button Style="{StaticResource PresetButtonStyle}" Click="Preset_Click" Tag="60">
+                            <TextBlock Text="1 час" FontSize="12" FontWeight="Medium"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </Button>
+                        <Button Style="{StaticResource PresetButtonStyle}" Click="Preset_Click" Tag="120">
+                            <TextBlock Text="2 часа" FontSize="12" FontWeight="Medium"
+                                       Foreground="{DynamicResource PrimaryTextBrush}"/>
+                        </Button>
+                    </UniformGrid>
+
+                    <!-- Start Button -->
+                    <Button Style="{StaticResource AccentButtonStyle}" Margin="0,28,0,0"
+                            Click="Start_Click" HorizontalAlignment="Center">
+                        <TextBlock Text="Запустить" FontSize="15" FontWeight="SemiBold" Foreground="White"/>
+                    </Button>
+                </StackPanel>
+
+                <!-- Timer Active Panel -->
+                <StackPanel x:Name="TimerPanel" Visibility="Collapsed"
+                            VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel.RenderTransform>
+                        <TranslateTransform x:Name="TimerTranslate" Y="0"/>
+                    </StackPanel.RenderTransform>
+
+                    <TextBlock x:Name="TbActionInfo" Text="ПК выключится через"
+                               FontSize="15" HorizontalAlignment="Center"
+                               Foreground="{DynamicResource SecondaryTextBrush}" Margin="0,0,0,16"/>
+
+                    <TextBlock x:Name="TbCountdown" Text="00:30:00"
+                               FontSize="56" FontWeight="Light" HorizontalAlignment="Center"
+                               Foreground="{DynamicResource PrimaryTextBrush}" FontFamily="Segoe UI"/>
+
+                    <TextBlock x:Name="TbTargetTime" Text=""
+                               FontSize="13" HorizontalAlignment="Center" Margin="0,8,0,0"
+                               Foreground="{DynamicResource SecondaryTextBrush}"/>
+
+                    <Button Style="{StaticResource CancelButtonStyle}" Margin="0,40,0,0"
+                            Click="Cancel_Click" HorizontalAlignment="Center">
+                        <TextBlock Text="Отменить" FontSize="15" FontWeight="SemiBold" Foreground="White"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
